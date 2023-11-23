@@ -2,6 +2,7 @@ package connection
 
 import (
 	"encoding/json"
+	"fmt"
 	"log/slog"
 	"net"
 
@@ -22,7 +23,9 @@ func (s *ServerConn) Connect(c *Client) error {
 	s.Conn = conn
 
 	go s.ReadIncomingMessages(c)
-
+	if s.Conn == nil {
+		return fmt.Errorf("couldn't connect to %s", s.Addr)
+	}
 	return nil
 }
 
