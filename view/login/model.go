@@ -15,7 +15,7 @@ var (
 	blurredStyle        = lipgloss.NewStyle().Foreground(lipgloss.Color("240"))
 	cursorStyle         = focusedStyle.Copy()
 	noStyle             = lipgloss.NewStyle()
-	errorStyle          = lipgloss.NewStyle().Foreground(lipgloss.Color(lipgloss.Color("32")))
+	errorStyle          = lipgloss.NewStyle().Foreground(lipgloss.Color(lipgloss.Color("#FF0000")))
 	helpStyle           = blurredStyle.Copy()
 	cursorModeHelpStyle = lipgloss.NewStyle().Foreground(lipgloss.Color("244"))
 

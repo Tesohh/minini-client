@@ -1,19 +1,20 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"log/slog"
 	"os"
 
 	"github.com/Tesohh/minini-client/connection"
+	"github.com/Tesohh/minini-client/message"
 	"github.com/Tesohh/minini-client/rp"
 	"github.com/Tesohh/minini-client/view/login"
 	tea "github.com/charmbracelet/bubbletea"
+	_ "github.com/joho/godotenv/autoload"
 )
 
 func main() {
-	file, err := os.Open("./.log")
+	file, err := os.OpenFile(".log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -29,15 +30,21 @@ func main() {
 	}
 	defer s.Conn.Close()
 
-	// s.Send(message.Msg{Action: "login", Data: map[string]any{"username": "tesohh", "password": "zestfest"}})
+	go func() {
+		username := os.Getenv("USERNAME")
+		password := os.Getenv("PASSWORD")
+		if username == "" || password == "" {
+			return
+		}
+
+		s.Send(message.Msg{Action: "login", Data: map[string]any{"username": username, "password": password}})
+	}()
 
 	model := login.InitialModel(s, "login")
 	rp.Global.TeaProg = tea.NewProgram(model, tea.WithAltScreen())
 	if _, err := rp.Global.TeaProg.Run(); err != nil {
 		log.Fatal("Couldn't start login screen")
 	}
-
-	fmt.Println("Sb")
 
 	<-c.Quitch
 }
