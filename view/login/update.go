@@ -42,6 +42,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					Action: m.mode,
 					Data:   map[string]any{"username": m.inputs[0].Value(), "password": m.inputs[1].Value()},
 				})
+				m.c.Username = m.inputs[0].Value()
 				// return m, tea.Quit
 			}
 

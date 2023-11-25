@@ -11,6 +11,7 @@ type Client struct {
 	Authenticated bool
 	Actions       map[string]ActionFunc
 	PlayerID      string
+	Username      string
 	State         data.User
 	Quitch        chan struct{}
 }

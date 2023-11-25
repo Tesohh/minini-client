@@ -31,12 +31,14 @@ type Model struct {
 	mode           string
 	wrongSomething bool
 
+	c *connection.Client
 	s *connection.ServerConn
 }
 
-func InitialModel(s *connection.ServerConn, mode string) Model {
+func InitialModel(c *connection.Client, s *connection.ServerConn, mode string) Model {
 	m := Model{
 		inputs: make([]textinput.Model, 2),
+		c:      c,
 		s:      s,
 		mode:   mode,
 	}

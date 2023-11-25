@@ -35,6 +35,9 @@ func (s *ServerConn) ReadIncomingMessages(c *Client) {
 		length, err := s.Conn.Read(buf)
 		if err != nil {
 			slog.Error("ServerConn.ReadIncomingMessages error while reading:", "error", err.Error())
+			if err.Error() == "EOF" {
+				panic("disconnected from server")
+			}
 		}
 
 		var msg message.Msg
