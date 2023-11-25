@@ -66,7 +66,7 @@ var tiles = []Tile{
 	{
 		MapChar:        't',
 		Name:           "tree",
-		RenderChar:     '^',
+		RenderChar:     '↟',
 		FG:             lipgloss.Color("#FFB7C5"),
 		BG:             lipgloss.Color("#00FF00"),
 		CannotWalkOver: true,
