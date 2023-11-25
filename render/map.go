@@ -2,18 +2,38 @@ package render
 
 import (
 	"bytes"
-	"fmt"
 	"os"
 	"path"
+	"strings"
 
+	"github.com/charmbracelet/lipgloss"
 	"gopkg.in/yaml.v3"
 )
+
+var biomeColors = map[string]lipgloss.Color{
+	"forest": GetTile('.').BG,
+}
 
 type Map struct {
 	Name  string `yaml:"name,omitempty"`
 	Biome string `yaml:"biome,omitempty"`
 
 	Tiles [][]Tile
+}
+
+func (m Map) String() string {
+	s := ""
+	for _, row := range m.Tiles {
+		for _, col := range row {
+			if col.BG == "" {
+				col.BG = biomeColors[m.Biome]
+			}
+
+			s += col.String()
+		}
+		s += "\n"
+	}
+	return strings.TrimSuffix(s, "\n")
 }
 
 func MapFromFile(filename string) (*Map, error) {
@@ -51,11 +71,5 @@ func MapFromFile(filename string) (*Map, error) {
 		}
 	}
 
-	for _, row := range m.Tiles {
-		for _, col := range row {
-			fmt.Print(col)
-		}
-		fmt.Println("")
-	}
 	return &m, nil
 }

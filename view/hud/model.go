@@ -1,7 +1,6 @@
 package hud
 
 import (
-	"log/slog"
 	"strings"
 
 	"github.com/Tesohh/minini-client/connection"
@@ -19,7 +18,7 @@ type Model struct {
 	c *connection.Client
 	s *connection.ServerConn
 
-	models          map[string]teaHudModel
+	models          map[string]tea.Model
 	focusableModels []string
 	focusIndex      int
 	// keystrokes are forwarded to the current focus
@@ -35,7 +34,7 @@ func InitialModel(c *connection.Client, s *connection.ServerConn) Model {
 	return Model{
 		c: c,
 		s: s,
-		models: map[string]teaHudModel{
+		models: map[string]tea.Model{
 			"game": game.InitialModel(c, s),
 		},
 		focusableModels: []string{"game"},
@@ -50,6 +49,10 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		switch msg.String() {
 		case "ctrl+c":
 			return m, tea.Quit
+		default:
+			mod, cmd := m.models[m.focusableModels[m.focusIndex]].Update(msg)
+			m.models[m.focusableModels[m.focusIndex]] = mod
+			return m, cmd
 		}
 	case tea.WindowSizeMsg:
 		m.help.Width = msg.Width
@@ -60,13 +63,18 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 func (m Model) View() string {
 	var b strings.Builder
 
+	var keys help.KeyMap
 	currentModel := m.models[m.focusableModels[m.focusIndex]]
-	slog.Info("model", "model", currentModel.Keys())
+	if currentModel, ok := currentModel.(teaHudModel); ok {
+		keys = currentModel.Keys()
+	}
 
 	b.WriteString(m.models["game"].View())
 
 	b.WriteByte('\n')
-	b.WriteString(m.help.View(currentModel.Keys()))
+	if keys != nil {
+		b.WriteString(m.help.View(keys))
+	}
 
 	return b.String()
 }

@@ -7,7 +7,6 @@ import (
 
 	"github.com/Tesohh/minini-client/connection"
 	"github.com/Tesohh/minini-client/message"
-	"github.com/Tesohh/minini-client/render"
 	"github.com/Tesohh/minini-client/rp"
 	"github.com/Tesohh/minini-client/view/hud"
 	"github.com/Tesohh/minini-client/view/login"
@@ -16,11 +15,12 @@ import (
 )
 
 func main() {
-	_, err := render.MapFromFile("assets/maps/world1.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-	return
+	// m, err := render.MapFromFile("assets/maps/world1.txt")
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// fmt.Println(m)
+	// return
 	file, err := os.OpenFile(".log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
 	if err != nil {
 		log.Fatal(err)

@@ -19,26 +19,37 @@ func (t Tile) String() string {
 	return lipgloss.NewStyle().Foreground(t.FG).Background(t.BG).Render(string(t.RenderChar))
 }
 
+var unknownTile = Tile{
+	MapChar:        '?',
+	Name:           "unknown",
+	RenderChar:     '?',
+	FG:             lipgloss.Color("#f800f8"),
+	CannotWalkOver: false,
+}
+
+var emptyTile = Tile{
+	MapChar:        '§',
+	Name:           "empty",
+	RenderChar:     ' ',
+	CannotWalkOver: true,
+}
+
 var tiles = []Tile{
-	{
-		MapChar:        '?',
-		Name:           "unknown",
-		RenderChar:     '?',
-		FG:             lipgloss.Color("#f800f8"),
-		CannotWalkOver: false,
-	},
+	unknownTile,
+	emptyTile,
 	{
 		MapChar:        '.',
 		Name:           "grass",
 		RenderChar:     '█',
-		FG:             lipgloss.Color("#00FF00"),
+		FG:             lipgloss.Color("#20FF20"),
 		CannotWalkOver: false,
 	},
 	{
 		MapChar:        '~',
 		Name:           "water",
-		RenderChar:     '█',
-		FG:             lipgloss.Color("#0000FF"),
+		RenderChar:     '~',
+		FG:             lipgloss.Color("#FFFFFF"),
+		BG:             lipgloss.Color("#0000FF"),
 		CannotWalkOver: true,
 	},
 	{
@@ -80,5 +91,5 @@ func GetTile(mapChar rune) Tile {
 		}
 	}
 
-	return tiles[0] // unknown
+	return unknownTile // unknown
 }
